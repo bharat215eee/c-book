@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction to Functions - C Programming</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { background: #111; color: #eee; font-family: 'Segoe UI', sans-serif; }
+    .sidebar { position: fixed; top: 0; left: 0; width: 220px; height: 100vh; background-color: #222; padding: 20px; }
+    .sidebar a { color: #ddd; text-decoration: none; display: block; margin-bottom: 15px; transition: 0.2s; }
+    .sidebar a:hover { color: #0dcaf0; }
+    .main { margin-left: 240px; padding: 30px; }
+    .section { margin-bottom: 40px; }
+    .quiz-box { background: #222; padding: 20px; border-radius: 12px; }
+    input[type="text"], input[type="number"] { background: #111; color: #fff; border: 1px solid #555; }
+    .animation-container { background: #1c1c1c; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+    .step { display: inline-block; margin: 0 10px; padding: 10px 20px; border-radius: 10px; background: #0dcaf0; color: #000; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h5 class="text-info">📘 Topics</h5>
+  <a href="index.html">🏠 Home</a>
+  <a href="intro.html">📌 Introduction</a>
+  <a href="types.html">📚 Types of Functions</a>
+  <a href="structure.html">📐 Function Structure</a>
+  <a href="call.html">🔁 Call by Value/Reference</a>
+  <a href="arrays.html">📦 Arrays to Functions</a>
+  <a href="recursion.html">🔄 Recursion</a>
+</div>
+
+<div class="main">
+  <h1>📌 Introduction to Functions</h1>
+
+  <div class="section">
+    <p>In C programming, a <strong>function</strong> is a reusable block of code designed to perform a specific task. Instead of repeating lines of code, functions help organize and modularize your programs.</p>
+  </div>
+
+  <div class="section animation-container">
+    <span class="step">Main()</span>
+    <span class="step">↓ Call</span>
+    <span class="step">my_func()</span>
+    <span class="step">↓ Execute</span>
+    <span class="step">Return</span>
+  </div>
+
+  <div class="section">
+    <h4>✨ Why Use Functions?</h4>
+    <ul>
+      <li>🔁 <strong>Reusability</strong>: Define once, use many times</li>
+      <li>📏 <strong>Readability</strong>: Cleaner and logical code structure</li>
+      <li>🔍 <strong>Debugging</strong>: Isolate issues easily</li>
+      <li>💾 <strong>Memory Efficient</strong>: Avoid redundant instructions</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h4>🧪 Quiz: Test Your Knowledge</h4>
+    <form id="quizForm">
+      <div class="mb-3">
+        <label>👤 Name:</label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+      <div class="mb-3">
+        <label>🆔 Roll Number:</label>
+        <input type="text" class="form-control" name="rollno" required>
+      </div>
+
+      <div class="quiz-box">
+        <p><strong>1. What is the purpose of using a function?</strong></p>
+        <label><input type="radio" name="q1" value="A"> To increase repetition</label><br>
+        <label><input type="radio" name="q1" value="B"> <strong>To improve reusability</strong></label><br>
+        <label><input type="radio" name="q1" value="C"> To make code longer</label>
+      </div>
+
+      <div class="quiz-box mt-3">
+        <p><strong>2. Which keyword is used to return a value?</strong></p>
+        <label><input type="radio" name="q2" value="A"> void</label><br>
+        <label><input type="radio" name="q2" value="B"> static</label><br>
+        <label><input type="radio" name="q2" value="C"> <strong>return</strong></label>
+      </div>
+
+      <div class="mt-4">
+        <button type="submit" class="btn btn-info">Submit Quiz</button>
+        <p id="status" class="mt-3 text-success"></p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('quizForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const rollno = form.rollno.value;
+    const q1 = form.q1.value || 'NA';
+    const q2 = form.q2.value || 'NA';
+    const score = (q1 === 'B' ? 1 : 0) + (q2 === 'C' ? 1 : 0);
+
+    // Google Apps Script URL
+    const scriptURL = 'const scriptURL = 'https://script.google.com/macros/s/AKfycbxuJ8drq3HSY5UnOZTWZqiApUDj24E691ZcNQ7Q4gMwhMEk4XDNAuJtWz33USy1F4aTMw/exec';
+';
+
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: new URLSearchParams({
+        name, rollno, topic: 'Introduction', q1, q2, score
+      })
+    })
+    .then(() => document.getElementById('status').innerText = '✅ Response submitted successfully!')
+    .catch(err => alert('❌ Submission failed. Please try again.'));
+  });
+</script>
+
+</body>
+</html>

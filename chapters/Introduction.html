@@ -1,0 +1,38 @@
+<main class="max-w-4xl mx-auto pt-24 pb-12 px-4">
+  <section class="bg-white text-gray-800 p-8 rounded-lg shadow-lg">
+    <h2 class="text-3xl font-bold mb-4">Chapter 1 – Introduction to C</h2>
+
+    <h3 class="text-xl font-semibold mt-6">Why C?</h3>
+    <p>C is the mother of modern languages, used in OS kernels, embedded systems, and high-performance software.</p>
+    <img src="../figs/c-history.jpg" onerror="this.src='../figs/c-history.png'" alt="C History" class="my-4 mx-auto rounded">
+
+    <!-- QUIZ (same pattern as Python) -->
+    <div class="quiz mt-8 p-6 bg-gray-50 rounded-lg">
+      <h3 class="text-xl font-medium mb-4">Quiz – Introduction</h3>
+
+      <!-- STUDENT DETAILS -->
+      <div class="bg-gray-100 p-4 rounded mb-4">
+        <h4 class="font-semibold mb-2">Student Details</h4>
+        <div class="grid md:grid-cols-2 gap-4">
+          <input id="student-name" placeholder="Full Name" class="p-2 border rounded" required>
+          <input id="roll-number" placeholder="Roll Number" class="p-2 border rounded" required>
+          <input id="branch" placeholder="Branch" class="p-2 border rounded" required>
+          <input id="section" placeholder="Section" class="p-2 border rounded" required>
+        </div>
+      </div>
+
+      <form id="quiz-introduction" onsubmit="submitQuiz(event,'introduction')">
+        <!-- QUESTIONS (add as many as you want) -->
+        <p>1. Who invented C?</p>
+        <input type="text" name="q1" class="border p-2 w-full mb-2" required><br>
+
+        <p>2. C is a ___ language.</p>
+        <label><input type="radio" name="q2" value="high" required> High-level</label><br>
+        <label><input type="radio" name="q2" value="mid"> Mid-level</label><br>
+
+        <button type="submit" class="mt-4 bg-green-700 text-white px-5 py-2 rounded hover:bg-green-600">Submit Quiz</button>
+      </form>
+      <div id="quiz-introduction-output" class="mt-4 font-medium"></div>
+    </div>
+  </section>
+</main>
