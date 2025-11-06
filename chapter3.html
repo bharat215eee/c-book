@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chapter 3: Data Types & Storage Classes</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+
+  <!-- AOS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
+
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js"></script>
+
+  <!-- CodeMirror + Dracula -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Base styling — dark elegant */
+    body { font-family: 'Inter', sans-serif; margin:0; color:#e6eef8;
+           background: linear-gradient(135deg,#061018 0%, #071025 100%); }
+    a { color: inherit; }
+
+    /* Header: green gradient for Chapter 3 */
+    .header-gradient { background: linear-gradient(90deg,#15803d,#10b981); }
+
+    /* Card */
+    .card { background:#071225; border-left:4px solid rgba(16,185,129,0.9);
+           border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.6); transition:all .28s; }
+    .card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(2,6,23,0.75); }
+
+    /* Code editor area */
+    .code-editor { background:#0b1220; border:1px solid #112233; border-radius:8px; overflow:hidden; }
+
+    /* Mermaid */
+    .mermaid { background:transparent; padding:1rem; border-radius:8px; overflow-x:auto; }
+
+    /* Quiz options */
+    .quiz-option { cursor:pointer; padding:.72rem; background:#061626; border-radius:8px;
+                  margin:.45rem 0; border:1px solid rgba(255,255,255,0.03); transition:.18s; color:#cfe8ff; }
+    .quiz-option:hover { background: rgba(16,185,129,0.06); transform:translateY(-2px); }
+    .quiz-option.correct { background:#065f46 !important; color:#d1fae5; border-color:rgba(34,197,94,0.14); }
+    .quiz-option.wrong { background:#5f1d1d !important; color:#fee2e2; border-color:rgba(239,68,68,0.14); }
+
+    /* Buttons */
+    .btn { background:#10b981; color:#022c22; padding:.6rem 1rem; border-radius:8px; font-weight:700; }
+    .btn:hover { transform:translateY(-2px); opacity:.95; }
+
+    /* Footer */
+    .footer { background:#041018; color:#94a3b8; padding:1.25rem; text-align:center; font-size:.92rem; }
+
+    /* Headings accent */
+    h2 { color:#9ef3c9; } /* soft green */
+    h3 { color:#bbf7d0; }
+
+    /* Main spacing (header padding will be set dynamically) */
+    main { max-width:1100px; margin: 2rem auto; padding: 2rem 1.25rem 4rem; }
+
+    pre { background:#041018; padding:.8rem; border-radius:8px; color:#cfe8ff; overflow:auto; }
+    table { width:100%; border-collapse:collapse; }
+    table td, table th { padding:.5rem; vertical-align:top; color:#cfe8ff; }
+    .symbol { display:flex; align-items:center; justify-content:center; width:100px; height:50px; border-radius:8px; font-weight:700; color:#fff; margin:0 auto; }
+    .symbol-char { background:#065f46; border:2px solid #10b981; }
+    .symbol-process { background:#164e63; border:2px solid #34d399; }
+    .symbol-decision { background:#0f172a; border:2px solid #60a5fa; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); width:90px; height:90px; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="header-gradient fixed w-full z-50 shadow-lg" aria-label="Site header">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center space-x-3">
+        <svg class="w-10 h-10" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 20C30 20 20 30 20 50s10 30 30 30 30-10 30-30S70 20 50 20z" fill="#10b981"/>
+          <path d="M40 40h20v20H40z" fill="#fff"/>
+          <text x="50" y="90" font-size="12" text-anchor="middle" fill="#fff">C</text>
+        </svg>
+        <h1 class="text-xl font-bold text-white">C Programming</h1>
+      </a>
+
+      <nav>
+        <a href="chapter2.html" class="text-white hover:underline mr-4">Prev: Chapter 2</a>
+        <a href="chapter4.html" class="text-white hover:underline">Next: Chapter 4</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main>
+
+    <!-- Title -->
+    <section class="text-center mb-12" data-aos="fade-up">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2">Chapter 3: Data Types & Storage Classes</h1>
+      <p class="text-green-100 mb-1">Fundamental & derived types, storage classes, and input/output</p>
+    </section>
+
+    <!-- 1. Data Types Overview -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="60">
+      <h2 class="text-2xl font-semibold mb-3">1. Classification of Data Types</h2>
+      <p class="text-green-100 mb-4">C data types are broadly classified as:</p>
+
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="p-4">
+          <h3 class="text-lg font-medium mb-2">Primary / Fundamental</h3>
+          <ul class="list-disc list-inside text-green-100">
+            <li>char, int, float, double, void</li>
+          </ul>
+        </div>
+
+        <div class="p-4">
+          <h3 class="text-lg font-medium mb-2">Derived</h3>
+          <ul class="list-disc list-inside text-green-100">
+            <li>arrays, pointers, functions</li>
+          </ul>
+        </div>
+
+        <div class="p-4">
+          <h3 class="text-lg font-medium mb-2">User-defined</h3>
+          <ul class="list-disc list-inside text-green-100">
+            <li>struct, union, enum, typedef</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mermaid mt-4">
+        %%{init:{'theme':'dark'}}%%
+        graph LR
+          A[Data Types] --> B[Primary]
+          A --> C[Derived]
+          A --> D[User-defined]
+          style A fill:#065f46,stroke:#10b981,color:#fff
+          style B fill:#064e3b,stroke:#34d399,color:#fff
+          style C fill:#0b2550,stroke:#60a5fa,color:#fff
+          style D fill:#075985,stroke:#3b82f6,color:#fff
+      </div>
+    </div>
+
+    <!-- 2. Fundamental Types: char, int, float, double, void -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="120">
+      <h2 class="text-2xl font-semibold mb-3">2. Fundamental Data Types</h2>
+      <p class="text-green-100 mb-3">Sizes may vary by platform, typical sizes shown below.</p>
+
+      <table class="mb-4">
+        <thead>
+          <tr><th class="text-left">Type</th><th class="text-left">Keyword</th><th class="text-left">Typical Size</th><th class="text-left">Printf</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Character</td><td>char</td><td>1 byte</td><td>%c</td></tr>
+          <tr><td>Integer</td><td>int</td><td>4 bytes (typ)</td><td>%d</td></tr>
+          <tr><td>Float</td><td>float</td><td>4 bytes</td><td>%f</td></tr>
+          <tr><td>Double</td><td>double</td><td>8 bytes</td><td>%lf</td></tr>
+          <tr><td>Void</td><td>void</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Code example</h3>
+          <div class="code-editor">
+            <textarea id="ch3-code-fund">
+#include &lt;stdio.h&gt;
+
+int main() {
+    char ch = 'A';
+    int n = 2025;
+    float f = 3.14f;
+    double d = 2.718281828;
+    printf("%c %d %.2f %lf\n", ch, n, f, d);
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Quick notes</h3>
+          <ul class="list-disc list-inside text-green-100">
+            <li>char may be signed or unsigned</li>
+            <li>Use %lf for double in printf</li>
+            <li>float precision ≈ 6 digits, double ≈ 15 digits</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — Fundamental Types (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="fund">
+          <div class="quiz-question" data-answer="%c">
+            <p><strong>1.</strong> Which printf specifier prints a char?</p>
+            <div class="quiz-option">A) %d</div>
+            <div class="quiz-option">B) %f</div>
+            <div class="quiz-option">C) %c</div>
+            <div class="quiz-option">D) %s</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%d">
+            <p><strong>2.</strong> Which specifier prints an int?</p>
+            <div class="quiz-option">A) %lf</div>
+            <div class="quiz-option">B) %f</div>
+            <div class="quiz-option">C) %d</div>
+            <div class="quiz-option">D) %c</div>
+          </div>
+
+          <div class="quiz-question" data-answer="4 bytes">
+            <p><strong>3.</strong> Typical size of int on a 32-bit/64-bit system?</p>
+            <div class="quiz-option">A) 1 byte</div>
+            <div class="quiz-option">B) 2 bytes</div>
+            <div class="quiz-option">C) 4 bytes</div>
+            <div class="quiz-option">D) 8 bytes</div>
+          </div>
+
+          <div class="quiz-question" data-answer="double">
+            <p><strong>4.</strong> Which type has ~15 digits of precision?</p>
+            <div class="quiz-option">A) float</div>
+            <div class="quiz-option">B) double</div>
+            <div class="quiz-option">C) char</div>
+            <div class="quiz-option">D) int</div>
+          </div>
+
+          <div class="quiz-question" data-answer="void">
+            <p><strong>5.</strong> Which keyword indicates no return value?</p>
+            <div class="quiz-option">A) null</div>
+            <div class="quiz-option">B) void</div>
+            <div class="quiz-option">C) none</div>
+            <div class="quiz-option">D) empty</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. Derived & User-defined data types -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="180">
+      <h2 class="text-2xl font-semibold mb-3">3. Derived & User-defined Types</h2>
+      <p class="text-green-100 mb-3">Derived: arrays, pointers, function types. User-defined: structs, unions, enums.</p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Struct example</h3>
+          <div class="code-editor">
+            <textarea id="ch3-code-struct">
+#include &lt;stdio.h&gt;
+struct Point { int x; int y; };
+int main() {
+    struct Point p = {10, 20};
+    printf("x=%d y=%d\n", p.x, p.y);
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Pointer example</h3>
+          <div class="code-editor">
+            <textarea id="ch3-code-ptr">
+#include &lt;stdio.h&gt;
+int main() {
+    int v = 42;
+    int *p = &v;
+    printf("v=%d *p=%d\\n", v, *p);
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="mermaid mt-4">
+        %%{init:{'theme':'dark'}}%%
+        graph LR
+          A[Derived Types] --> B[arrays]
+          A --> C[pointers]
+          A --> D[functions]
+          A --> E[structs/unions/enums]
+          style A fill:#065f46,stroke:#10b981,color:#fff
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — Derived & User-defined (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="derived">
+          <div class="quiz-question" data-answer="struct">
+            <p><strong>1.</strong> Which keyword defines a structure?</p>
+            <div class="quiz-option">A) class</div>
+            <div class="quiz-option">B) struct</div>
+            <div class="quiz-option">C) object</div>
+            <div class="quiz-option">D) union</div>
+          </div>
+
+          <div class="quiz-question" data-answer="pointer">
+            <p><strong>2.</strong> Which of these stores an address?</p>
+            <div class="quiz-option">A) int</div>
+            <div class="quiz-option">B) pointer</div>
+            <div class="quiz-option">C) char</div>
+            <div class="quiz-option">D) float</div>
+          </div>
+
+          <div class="quiz-question" data-answer="union">
+            <p><strong>3.</strong> Which type shares memory between members?</p>
+            <div class="quiz-option">A) struct</div>
+            <div class="quiz-option">B) enum</div>
+            <div class="quiz-option">C) union</div>
+            <div class="quiz-option">D) array</div>
+          </div>
+
+          <div class="quiz-question" data-answer="arrays">
+            <p><strong>4.</strong> Which is used to store a fixed-size sequence of elements?</p>
+            <div class="quiz-option">A) pointer</div>
+            <div class="quiz-option">B) struct</div>
+            <div class="quiz-option">C) array</div>
+            <div class="quiz-option">D) union</div>
+          </div>
+
+          <div class="quiz-question" data-answer="enum">
+            <p><strong>5.</strong> Which creates named integer constants?</p>
+            <div class="quiz-option">A) typedef</div>
+            <div class="quiz-option">B) enum</div>
+            <div class="quiz-option">C) macro</div>
+            <div class="quiz-option">D) const</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Storage Classes Overview -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="240">
+      <h2 class="text-2xl font-semibold mb-3">4. Storage Classes</h2>
+      <p class="text-green-100 mb-3">Storage classes determine scope, lifetime, visibility, memory location, and default initial value.</p>
+
+      <div class="mermaid mt-4">
+        %%{init:{'theme':'dark'}}%%
+        graph TD
+          S[Storage Classes] --> A[auto]
+          S --> B[static]
+          S --> C[register]
+          S --> D[extern]
+          style S fill:#065f46,stroke:#10b981;color:#fff
+      </div>
+
+      <p class="mt-3 text-green-100">We will examine each: <strong>auto, static, register, extern</strong>.</p>
+    </div>
+
+    <!-- auto -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="300">
+      <h2 class="text-2xl font-semibold mb-3">4.1 auto (Automatic)</h2>
+      <p class="text-green-100 mb-3">Default for local variables — created at block entry, destroyed on exit, contain garbage if uninitialized.</p>
+
+      <div class="code-editor">
+        <textarea id="ch3-code-auto">
+#include &lt;stdio.h&gt;
+int main() {
+    auto int a; // implicit for local variables
+    int b;
+    printf("%d %d\n", a, b); // indeterminate values (garbage)
+    return 0;
+}
+        </textarea>
+      </div>
+
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — auto (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="auto">
+          <div class="quiz-question" data-answer="local">
+            <p><strong>1.</strong> Variables declared inside a function have which scope?</p>
+            <div class="quiz-option">A) global</div>
+            <div class="quiz-option">B) local</div>
+            <div class="quiz-option">C) extern</div>
+            <div class="quiz-option">D) static</div>
+          </div>
+
+          <div class="quiz-question" data-answer="garbage">
+            <p><strong>2.</strong> Uninitialized automatic variables contain what?</p>
+            <div class="quiz-option">A) zero</div>
+            <div class="quiz-option">B) garbage</div>
+            <div class="quiz-option">C) null</div>
+            <div class="quiz-option">D) 1</div>
+          </div>
+
+          <div class="quiz-question" data-answer="auto">
+            <p><strong>3.</strong> Which storage class is the default for local variables?</p>
+            <div class="quiz-option">A) auto</div>
+            <div class="quiz-option">B) static</div>
+            <div class="quiz-option">C) extern</div>
+            <div class="quiz-option">D) register</div>
+          </div>
+
+          <div class="quiz-question" data-answer="block">
+            <p><strong>4.</strong> Auto variables exist for the duration of a ______?</p>
+            <div class="quiz-option">A) program</div>
+            <div class="quiz-option">B) block</div>
+            <div class="quiz-option">C) file</div>
+            <div class="quiz-option">D) function only</div>
+          </div>
+
+          <div class="quiz-question" data-answer="no">
+            <p><strong>5.</strong> Can automatic variables be accessed outside their block?</p>
+            <div class="quiz-option">A) yes</div>
+            <div class="quiz-option">B) no</div>
+            <div class="quiz-option">C) sometimes</div>
+            <div class="quiz-option">D) always</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- static -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="360">
+      <h2 class="text-2xl font-semibold mb-3">4.2 static</h2>
+      <p class="text-green-100 mb-3">Static variables retain value between function calls. Static global variables are limited to file scope.</p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Local static example</h3>
+          <div class="code-editor">
+            <textarea id="ch3-code-static">
+#include &lt;stdio.h&gt;
+void f() {
+    static int s = 0;
+    s++;
+    printf("s=%d\n", s);
+}
+int main() {
+    f(); f(); f();
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Global static example</h3>
+          <pre><code>/* file1.c */
+static int x = 10; // visible only in this file
+/* file2.c */ 
+extern int x; // error: x not visible here</code></pre>
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — static (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="static">
+          <div class="quiz-question" data-answer="retains">
+            <p><strong>1.</strong> Static local variables ______ between calls.</p>
+            <div class="quiz-option">A) lose value</div>
+            <div class="quiz-option">B) retain value</div>
+            <div class="quiz-option">C) reset to default each time</div>
+            <div class="quiz-option">D) are undefined</div>
+          </div>
+
+          <div class="quiz-question" data-answer="file">
+            <p><strong>2.</strong> Static global variables have what visibility?</p>
+            <div class="quiz-option">A) program-wide</div>
+            <div class="quiz-option">B) file-only</div>
+            <div class="quiz-option">C) local</div>
+            <div class="quiz-option">D) external</div>
+          </div>
+
+          <div class="quiz-question" data-answer="0">
+            <p><strong>3.</strong> Default initial value of static integral variables is?</p>
+            <div class="quiz-option">A) garbage</div>
+            <div class="quiz-option">B) 1</div>
+            <div class="quiz-option">C) 0</div>
+            <div class="quiz-option">D) -1</div>
+          </div>
+
+          <div class="quiz-question" data-answer="multiple">
+            <p><strong>4.</strong> Can a static variable be declared many times but initialized only once?</p>
+            <div class="quiz-option">A) yes</div>
+            <div class="quiz-option">B) no</div>
+            <div class="quiz-option">C) sometimes</div>
+            <div class="quiz-option">D) never</div>
+          </div>
+
+          <div class="quiz-question" data-answer="visible">
+            <p><strong>5.</strong> Static local variables are visible only inside the ______?</p>
+            <div class="quiz-option">A) file</div>
+            <div class="quiz-option">B) block/function</div>
+            <div class="quiz-option">C) program</div>
+            <div class="quiz-option">D) header</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- register -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="420">
+      <h2 class="text-2xl font-semibold mb-3">4.3 register</h2>
+      <p class="text-green-100 mb-3">Suggests storing variable in CPU registers for faster access. Address-of &amp; taking pointer is not allowed.</p>
+
+      <div class="code-editor">
+        <textarea id="ch3-code-register">
+#include &lt;stdio.h&gt;
+int main() {
+    register int r = 5;
+    // printf("%u", &r); // compile-time error: address of register variable
+    printf("%d\n", r);
+    return 0;
+}
+        </textarea>
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — register (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="register">
+          <div class="quiz-question" data-answer="register">
+            <p><strong>1.</strong> Which storage class suggests CPU register allocation?</p>
+            <div class="quiz-option">A) static</div>
+            <div class="quiz-option">B) auto</div>
+            <div class="quiz-option">C) register</div>
+            <div class="quiz-option">D) extern</div>
+          </div>
+
+          <div class="quiz-question" data-answer="address">
+            <p><strong>2.</strong> Can you take address of a register variable?</p>
+            <div class="quiz-option">A) yes</div>
+            <div class="quiz-option">B) no</div>
+            <div class="quiz-option">C) sometimes</div>
+            <div class="quiz-option">D) always</div>
+          </div>
+
+          <div class="quiz-question" data-answer="faster">
+            <p><strong>3.</strong> Register variables are generally ______ to access.</p>
+            <div class="quiz-option">A) slower</div>
+            <div class="quiz-option">B) faster</div>
+            <div class="quiz-option">C) same</div>
+            <div class="quiz-option">D) unpredictable</div>
+          </div>
+
+          <div class="quiz-question" data-answer="compiler">
+            <p><strong>4.</strong> Is register allocation guaranteed by the compiler?</p>
+            <div class="quiz-option">A) yes always</div>
+            <div class="quiz-option">B) no — it's a hint</div>
+            <div class="quiz-option">C) only on 64-bit</div>
+            <div class="quiz-option">D) only for globals</div>
+          </div>
+
+          <div class="quiz-question" data-answer="no">
+            <p><strong>5.</strong> Do register variables have default initial value 0?</strong></p>
+            <div class="quiz-option">A) yes</div>
+            <div class="quiz-option">B) no</div>
+            <div class="quiz-option">C) depends</div>
+            <div class="quiz-option">D) always 1</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- extern -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="480">
+      <h2 class="text-2xl font-semibold mb-3">4.4 extern</h2>
+      <p class="text-green-100 mb-3">Used to declare a global variable defined in another file. Declaration only — no memory allocated.</p>
+
+      <div class="code-editor">
+        <textarea id="ch3-code-extern">
+/* file1.c */
+int a = 48;
+
+/* file2.c */
+#include &lt;stdio.h&gt;
+extern int a;
+int main() {
+    printf("%d\n", a); // prints 48
+    return 0;
+}
+        </textarea>
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — extern (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="extern">
+          <div class="quiz-question" data-answer="extern">
+            <p><strong>1.</strong> Which keyword declares a variable defined elsewhere?</p>
+            <div class="quiz-option">A) static</div>
+            <div class="quiz-option">B) extern</div>
+            <div class="quiz-option">C) auto</div>
+            <div class="quiz-option">D) register</div>
+          </div>
+
+          <div class="quiz-question" data-answer="no">
+            <p><strong>2.</strong> Can extern variables be initialized in the declaration?</p>
+            <div class="quiz-option">A) yes</div>
+            <div class="quiz-option">B) no</div>
+            <div class="quiz-option">C) sometimes</div>
+            <div class="quiz-option">D) only in main</div>
+          </div>
+
+          <div class="quiz-question" data-answer="global">
+            <p><strong>3.</strong> Extern variables are typically ______ variables.</p>
+            <div class="quiz-option">A) local</div>
+            <div class="quiz-option">B) static</div>
+            <div class="quiz-option">C) global</div>
+            <div class="quiz-option">D) register</div>
+          </div>
+
+          <div class="quiz-question" data-answer="multiple">
+            <p><strong>4.</strong> Can extern variable be declared many times?</p>
+            <div class="quiz-option">A) no</div>
+            <div class="quiz-option">B) yes</div>
+            <div class="quiz-option">C) only once</div>
+            <div class="quiz-option">D) only in same file</div>
+          </div>
+
+          <div class="quiz-question" data-answer="decl">
+            <p><strong>5.</strong> Extern declaration allocates memory? (yes/no)</p>
+            <div class="quiz-option">A) yes</div>
+            <div class="quiz-option">B) no</div>
+            <div class="quiz-option">C) depends</div>
+            <div class="quiz-option">D) sometimes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Input/Output Functions -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="540">
+      <h2 class="text-2xl font-semibold mb-3">5. Input / Output Functions</h2>
+      <p class="text-green-100 mb-3">Standard I/O: printf, scanf, getchar, putchar, gets/puts (note: gets is unsafe).</p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">printf() basics</h3>
+          <pre><code>printf("format", args...);
+Format string may contain text, escape sequences and format specifiers like %d, %f, %c, %s</code></pre>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">scanf() basics</h3>
+          <pre><code>scanf("%d %f", &i, &f); // note ampersand & for address</code></pre>
+        </div>
+      </div>
+
+      <div class="code-editor mt-4">
+        <textarea id="ch3-code-io">
+#include &lt;stdio.h&gt;
+
+int main() {
+    int a; float b; char s[30];
+    printf("Enter int, float and string: ");
+    scanf("%d %f %s", &a, &b, s);
+    printf("You entered: %d %.2f %s\n", a, b, s);
+    return 0;
+}
+        </textarea>
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — I/O (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="io">
+          <div class="quiz-question" data-answer="scanf">
+            <p><strong>1.</strong> Which function reads formatted input?</p>
+            <div class="quiz-option">A) printf</div>
+            <div class="quiz-option">B) scanf</div>
+            <div class="quiz-option">C) putchar</div>
+            <div class="quiz-option">D) gets</div>
+          </div>
+
+          <div class="quiz-question" data-answer="&">
+            <p><strong>2.</strong> What operator is used to pass a variable's address to scanf?</p>
+            <div class="quiz-option">A) *</div>
+            <div class="quiz-option">B) &amp;</div>
+            <div class="quiz-option">C) %</div>
+            <div class="quiz-option">D) $</div>
+          </div>
+
+          <div class="quiz-question" data-answer="unsafe">
+            <p><strong>3.</strong> Which function is unsafe and should be avoided for input?</p>
+            <div class="quiz-option">A) gets</div>
+            <div class="quiz-option">B) fgets</div>
+            <div class="quiz-option">C) scanf</div>
+            <div class="quiz-option">D) getchar</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%s">
+            <p><strong>4.</strong> Which specifier reads a string in scanf/printf?</p>
+            <div class="quiz-option">A) %d</div>
+            <div class="quiz-option">B) %f</div>
+            <div class="quiz-option">C) %c</div>
+            <div class="quiz-option">D) %s</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%f">
+            <p><strong>5.</strong> Which specifier prints a float?</p>
+            <div class="quiz-option">A) %lf</div>
+            <div class="quiz-option">B) %d</div>
+            <div class="quiz-option">C) %f</div>
+            <div class="quiz-option">D) %c</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 6. Scope: block vs program -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="600">
+      <h2 class="text-2xl font-semibold mb-3">6. Scope: Block & Program</h2>
+      <p class="text-green-100 mb-3">Block scope (inside braces) vs program scope (global) — examples below.</p>
+
+      <div class="mermaid mb-4">
+        %%{init:{'theme':'dark'}}%%
+        graph TD
+          A[Program scope/global] --> B[file scope visible to functions]
+          C[Block scope/local] --> D[variables alive only in block]
+          style A fill:#075f46,stroke:#10b981
+          style C fill:#0b2a40,stroke:#60a5fa
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Example: block vs program</h3>
+          <div class="code-editor">
+            <textarea id="ch3-code-scope">
+#include &lt;stdio.h&gt;
+int x = 100; // program scope (global)
+int main() {
+    int x = 10; // local block scope
+    {
+        int x = 20;
+        printf("%d\\n", x); // prints 20
+    }
+    printf("%d\\n", x); // prints 10
+    printf("%d\\n", ::x); // not valid in C, but global accessible as 'x' outside blocks
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Notes</h3>
+          <ul class="list-disc list-inside text-green-100">
+            <li>Global variables visible across functions (and files with extern).</li>
+            <li>Local variables hide globals with same name within inner blocks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quiz — Scope (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="scope">
+          <div class="quiz-question" data-answer="global">
+            <p><strong>1.</strong> Variables declared outside functions are called?</p>
+            <div class="quiz-option">A) local</div>
+            <div class="quiz-option">B) global</div>
+            <div class="quiz-option">C) auto</div>
+            <div class="quiz-option">D) register</div>
+          </div>
+
+          <div class="quiz-question" data-answer="hide">
+            <p><strong>2.</strong> A local variable with same name as global will ______ the global inside the block.</p>
+            <div class="quiz-option">A) hide</div>
+            <div class="quiz-option">B) delete</div>
+            <div class="quiz-option">C) override globally</div>
+            <div class="quiz-option">D) not affect</div>
+          </div>
+
+          <div class="quiz-question" data-answer="block">
+            <p><strong>3.</strong> A variable declared in braces {} has what scope?</p>
+            <div class="quiz-option">A) file</div>
+            <div class="quiz-option">B) block</div>
+            <div class="quiz-option">C) program</div>
+            <div class="quiz-option">D) extern</div>
+          </div>
+
+          <div class="quiz-question" data-answer="extern">
+            <p><strong>4.</strong> Which keyword is used to access a global variable from another file?</p>
+            <div class="quiz-option">A) static</div>
+            <div class="quiz-option">B) extern</div>
+            <div class="quiz-option">C) auto</div>
+            <div class="quiz-option">D) register</div>
+          </div>
+
+          <div class="quiz-question" data-answer="lifetime">
+            <p><strong>5.</strong> Scope describes visibility; what describes duration the variable exists?</p>
+            <div class="quiz-option">A) scope</div>
+            <div class="quiz-option">B) lifetime</div>
+            <div class="quiz-option">C) storage</div>
+            <div class="quiz-option">D) type</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Summary & Nav -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="660">
+      <h2 class="text-2xl font-semibold mb-3">Summary</h2>
+      <ul class="list-disc list-inside text-green-100">
+        <li>Data types determine what kind of data a variable stores.</li>
+        <li>Storage classes control scope and lifetime: auto, static, register, extern.</li>
+        <li>Use appropriate types & storage classes for correctness & performance.</li>
+      </ul>
+
+      <div class="mt-6 flex gap-3">
+        <a href="chapter2.html" class="btn">← Chapter 2</a>
+        <a href="chapter4.html" class="btn">Chapter 4 →</a>
+        <a href="#" onclick="downloadNotes()" class="btn">Download Notes</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    © 2025 C Programming Course | Chapter 3 • <a href="../index.html" class="text-green-200 hover:underline">Home</a>
+  </footer>
+
+  <!-- Scripts: AOS, Mermaid -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // header padding fix + AOS init (prevents heading sliding)
+    (function() {
+      const header = document.querySelector('header');
+      if (header) {
+        header.removeAttribute('data-aos');
+        header.style.position = 'fixed';
+        header.style.top = '0';
+        header.style.left = '0';
+        header.style.width = '100%';
+        header.style.zIndex = '60';
+      }
+      function applyPadding() {
+        const h = header ? header.getBoundingClientRect().height : 80;
+        const main = document.querySelector('main');
+        if (main) main.style.paddingTop = (h + 20) + 'px';
+      }
+      window.addEventListener('load', applyPadding);
+      window.addEventListener('resize', applyPadding);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyPadding).catch(()=>{});
+      setTimeout(()=>{ if (window.AOS) AOS.init({once:true,duration:700,offset:120}); }, 60);
+      try { if (window.mermaid) mermaid.initialize({startOnLoad:true,theme:'dark'}); } catch(e){}
+    })();
+
+    // CodeMirror initialization
+    function initCM(id){
+      const ta = document.getElementById(id);
+      if (!ta || typeof CodeMirror === 'undefined') return;
+      if (ta._cm && ta._cm.toTextArea) try{ ta._cm.toTextArea(); }catch(e){}
+      const cm = CodeMirror.fromTextArea(ta, { mode:'text/x-csrc', theme:'dracula', lineNumbers:true, viewportMargin:Infinity });
+      ta._cm = cm;
+      return cm;
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      ['ch3-code-fund','ch3-code-struct','ch3-code-ptr','ch3-code-auto','ch3-code-static','ch3-code-register','ch3-code-extern','ch3-code-io','ch3-code-scope']
+        .forEach(id => initCM(id));
+    });
+
+    // Notes download
+    function downloadNotes(){
+      const txt = [
+        "Chapter 3: Data Types & Storage Classes",
+        "",
+        "Sections: Fundamental types, Derived & User-defined, Storage classes (auto/static/register/extern), I/O, Scope.",
+        "",
+        "Generated notes. Adapt for PDF."
+      ].join("\n");
+      const blob = new Blob([txt], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'Chapter3_notes.txt'; a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+  <!-- Robust quiz system + per-block Reset (same robust implementation) -->
+  <script>
+  (function(){
+    function norm(s){ return (s||'').toString().toLowerCase().trim(); }
+    const map = { newline:'\\n', tab:'\\t', backslash:'\\\\', doublequote:'\\"', singlequote:"\\'", carriage:'\\r', semicolon:';' };
+    function isCorrect(optionText, correctKey){
+      const o = norm(optionText), k = norm(correctKey);
+      if (!k) return false;
+      if (o === k || o.includes(k) || k.includes(o)) return true;
+      if (o.replace(/\s+/g,'') === k.replace(/\s+/g,'')) return true;
+      if (map[k] && (o.includes(map[k]) || o.replace(/\s+/g,'').includes(map[k]))) return true;
+      if (k.length <= 3 && o.includes(k)) return true;
+      return false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('.quiz-block').forEach((block, idx) => {
+        // add reset button if missing
+        if (!block.querySelector('.quiz-reset-btn')) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn quiz-reset-btn mt-4';
+          btn.textContent = 'Reset Quiz';
+          btn.addEventListener('click', function(){
+            block.querySelectorAll('.quiz-question').forEach(q => {
+              q.querySelectorAll('.quiz-option').forEach(o => {
+                o.classList.remove('correct','wrong');
+                o.style.pointerEvents = 'auto';
+              });
+            });
+          });
+          block.appendChild(btn);
+        }
+
+        // attach handlers
+        block.querySelectorAll('.quiz-question').forEach(q => {
+          const key = q.getAttribute('data-answer') || '';
+          // clean previous listeners by cloning options
+          q.querySelectorAll('.quiz-option').forEach(opt => {
+            const clone = opt.cloneNode(true);
+            opt.parentNode.replaceChild(clone, opt);
+          });
+          q.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.addEventListener('click', function(){
+              q.querySelectorAll('.quiz-option').forEach(o => o.style.pointerEvents = 'none');
+              const txt = (this.textContent||this.innerText||'').toString().trim();
+              const ok = isCorrect(txt, key);
+              if (ok) {
+                q.querySelectorAll('.quiz-option').forEach(o => {
+                  if (isCorrect((o.textContent||o.innerText||''), key)) o.classList.add('correct');
+                });
+              } else {
+                this.classList.add('wrong');
+                q.querySelectorAll('.quiz-option').forEach(o => {
+                  if (isCorrect((o.textContent||o.innerText||''), key)) o.classList.add('correct');
+                });
+              }
+            }, { once:true });
+          });
+        });
+      });
+    });
+
+    window.resetAllQuizzes = function(){ document.querySelectorAll('.quiz-reset-btn').forEach(b => b.click()); };
+  })();
+  </script>
+
+</body>
+</html>
