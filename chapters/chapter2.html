@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapter 2: C Tokens</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <!-- AOS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js"></script>
+
+  <!-- CodeMirror (v5) + Dracula theme -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Base */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0b1220 0%, #0f172a 100%);
+      color: #e6eef8;
+      margin: 0;
+    }
+    a { color: inherit; }
+
+    /* Header (blue gradient) */
+    .header-gradient {
+      background: linear-gradient(90deg, #0369a1, #06b6d4);
+    }
+
+    /* Card */
+    .card {
+      background-color: #0f172a;
+      border-left: 4px solid rgba(59,130,246,0.9);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      transition: all 0.28s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 45px rgba(2,6,23,0.75);
+    }
+
+    /* Code editor */
+    .code-editor {
+      border: 1px solid #132235;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0b1220;
+    }
+
+    /* Mermaid */
+    .mermaid {
+      background: transparent;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .mermaid svg { background: transparent !important; }
+
+    /* Quiz */
+    .quiz-option {
+      cursor: pointer;
+      padding: 0.75rem;
+      background: #071025;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      transition: all 0.18s;
+      border: 1px solid rgba(255,255,255,0.03);
+      color: #cfe8ff;
+    }
+    .quiz-option:hover { background: rgba(59,130,246,0.06); transform: translateY(-2px); }
+    .quiz-option.correct { background: #064e3b !important; color: #d1fae5; border-color: rgba(34,197,94,0.2); }
+    .quiz-option.wrong { background: #5f1d1d !important; color: #fee2e2; border-color: rgba(239,68,68,0.2); }
+
+    /* Buttons */
+    .btn {
+      background-color: #0ea5e9;
+      color: #04293a;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      transition: all 0.22s;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+    }
+    .btn:hover { transform: translateY(-3px); opacity: 0.95; }
+
+    /* Footer */
+    .footer {
+      background-color: #071025;
+      color: #94a3b8;
+      text-align: center;
+      padding: 1.25rem;
+      font-size: 0.92rem;
+    }
+
+    /* Headings accent */
+    h2 { color: #7dd3fc; } /* sky-300 */
+    h3 { color: #bfdbfe; } /* light blue */
+    pre { background: #071025; padding: 0.8rem; border-radius: 8px; overflow-x:auto; color:#cfe8ff; }
+
+    /* small layout niceties */
+    .symbol {
+      display:flex; align-items:center; justify-content:center;
+      width:100px;height:50px;border-radius:8px;margin:0 auto;font-weight:600;
+      color:white;
+    }
+    .symbol-oval { background:#0369a1; border:2px solid #06b6d4; border-radius:9999px; }
+    .symbol-io { background:#0ea5e9; border:2px solid #7dd3fc; clip-path: polygon(20% 0,100% 0,80% 100%,0 100%); }
+    .symbol-rect { background:#075985; border:2px solid #38bdf8; }
+    .symbol-diamond { background:#0f172a; border:2px solid #60a5fa; clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%); width:90px;height:90px; border-radius:0; }
+
+    /* responsive main container */
+    
+
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="header-gradient shadow-lg fixed w-full z-50" data-aos="fade-down">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center space-x-3">
+        <!-- icon -->
+        <svg class="w-10 h-10" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 20C30 20 20 30 20 50s10 30 30 30 30-10 30-30S70 20 50 20zm0 50c-10 0-18-8-18-18s8-18 18-18 18 8 18 18-8 18-18 18z" fill="#06b6d4"/>
+          <path d="M40 40h20v20H40z" fill="#ffffff"/>
+          <text x="50" y="90" font-size="12" text-anchor="middle" fill="#ffffff">C</text>
+        </svg>
+        <h1 class="text-xl font-bold text-white">C Programming</h1>
+      </a>
+      <nav>
+        <a href="../index.html" class="text-white hover:underline mr-4">Home</a>
+        <a href="chapter1.html" class="text-white hover:underline mr-4">Prev: Chapter 1</a>
+        <a href="chapter3.html" class="text-white hover:underline">Next: Chapter 3</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto pt-24 pb-12 px-4">
+
+    <!-- Title -->
+    <section class="text-center mb-12" data-aos="fade-up">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2">Chapter 2: C Tokens</h1>
+      <p class="text-lg text-sky-200 mb-2">Understanding the smallest building blocks of C programs</p>
+      <p class="text-sm text-sky-100 italic">Adapted from Dr. N Bharath Kumar — Unit: C Tokens</p>
+    </section>
+
+    <!-- 1. What are tokens (Mermaid diagram) -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="80">
+      <h2 class="text-2xl font-semibold mb-3">1. What are C Tokens?</h2>
+      <p class="text-sky-100 mb-4">
+        A <strong>token</strong> is the smallest meaningful unit of a C program that the compiler recognizes.
+        The compiler breaks the source code into tokens during lexical analysis.
+      </p>
+
+      <div class="mermaid mb-4">
+        %%{init: {'theme': 'dark'}}%%
+        graph TD
+          T[Tokens] --> A[Keywords]
+          T --> B[Identifiers]
+          T --> C[Constants]
+          T --> D[Strings/Characters]
+          T --> E[Operators]
+          T --> F[Punctuations]
+          T --> G[White Spaces / Comments]
+          style T fill:#0369a1,stroke:#06b6d4,color:#fff
+          style A fill:#075985,stroke:#38bdf8,color:#fff
+          style B fill:#0f172a,stroke:#60a5fa,color:#fff
+          style C fill:#0369a1,stroke:#7dd3fc,color:#fff
+      </div>
+
+      <p class="mt-2 text-sky-100">Tokens include: keywords, identifiers, constants, string/character literals, operators, and punctuation symbols.</p>
+    </div>
+
+    <!-- 2. Character Set -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="140">
+      <h2 class="text-2xl font-semibold mb-3">2. C Character Set & Escape Sequences</h2>
+      <p class="text-sky-100 mb-3">
+        The source character set used to write C programs includes alphabets, digits, special characters and whitespace.
+        The execution set includes escape sequences used at runtime.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Common Escape Sequences</h3>
+          <pre><code>\n  — newline
+\t  — tab
+\\  — backslash
+\'  — single quote
+\"  — double quote
+\b  — backspace
+\f  — form feed
+\r  — carriage return</code></pre>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Example: Using escape sequences</h3>
+          <div class="code-editor">
+            <textarea id="code-ch2-esc">
+#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello,\n\tWorld!\n");
+    printf("Quote: \"C Programming\"\\n");
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Character Set (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="escape">
+          <div class="quiz-question" data-answer="newline">
+            <p class="text-sky-100"><strong>1. Which escape sequence prints a new line?</strong></p>
+            <div class="quiz-option">A) \t</div>
+            <div class="quiz-option">B) \\</div>
+            <div class="quiz-option">C) \'</div>
+            <div class="quiz-option">D) \n (newline)</div>
+          </div>
+
+          <div class="quiz-question" data-answer="tab">
+            <p class="text-sky-100"><strong>2. Which escape sequence adds a horizontal tab?</strong></p>
+            <div class="quiz-option">A) \n</div>
+            <div class="quiz-option">B) \t</div>
+            <div class="quiz-option">C) \r</div>
+            <div class="quiz-option">D) \f</div>
+          </div>
+
+          <div class="quiz-question" data-answer="backslash">
+            <p class="text-sky-100"><strong>3. How do you print a backslash character?</strong></p>
+            <div class="quiz-option">A) \\</div>
+            <div class="quiz-option">B) \'</div>
+            <div class="quiz-option">C) \"</div>
+            <div class="quiz-option">D) \n</div>
+          </div>
+
+          <div class="quiz-question" data-answer="doublequote">
+            <p class="text-sky-100"><strong>4. Which escape sequence prints a double quote?</strong></p>
+            <div class="quiz-option">A) \'</div>
+            <div class="quiz-option">B) \\</div>
+            <div class="quiz-option">C) \"</div>
+            <div class="quiz-option">D) \t</div>
+          </div>
+
+          <div class="quiz-question" data-answer="carriage">
+            <p class="text-sky-100"><strong>5. Which escape sequence represents carriage return?</strong></p>
+            <div class="quiz-option">A) \r</div>
+            <div class="quiz-option">B) \n</div>
+            <div class="quiz-option">C) \b</div>
+            <div class="quiz-option">D) \f</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. Keywords -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="180">
+      <h2 class="text-2xl font-semibold mb-3">3. Keywords</h2>
+      <p class="text-sky-100 mb-3">
+        Keywords are reserved words with special meaning in C. They cannot be used as identifiers.
+        Standard C has 32 keywords (e.g., <code>int</code>, <code>return</code>, <code>if</code>, <code>while</code>).
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Example: Using keywords</h3>
+          <div class="code-editor">
+            <textarea id="code-ch2-kw">
+#include &lt;stdio.h&gt;
+
+int max(int a, int b) {
+    if (a > b) return a;
+    else return b;
+}
+
+int main() {
+    int x = 10, y = 20;
+    printf("Max = %d\n", max(x,y));
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Common keywords</h3>
+          <pre><code>auto break case char const continue default do
+double else enum extern float for goto if
+int long register return short signed sizeof static
+struct switch typedef union unsigned void volatile while</code></pre>
+        </div>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Keywords (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="keywords">
+          <div class="quiz-question" data-answer="main">
+            <p class="text-sky-100"><strong>1. Which function is the entry point of a C program?</strong></p>
+            <div class="quiz-option">A) start()</div>
+            <div class="quiz-option">B) init()</div>
+            <div class="quiz-option">C) main()</div>
+            <div class="quiz-option">D) run()</div>
+          </div>
+
+          <div class="quiz-question" data-answer="return">
+            <p class="text-sky-100"><strong>2. Which keyword returns a value from a function?</strong></p>
+            <div class="quiz-option">A) exit</div>
+            <div class="quiz-option">B) stop</div>
+            <div class="quiz-option">C) return</div>
+            <div class="quiz-option">D) break</div>
+          </div>
+
+          <div class="quiz-question" data-answer="sizeof">
+            <p class="text-sky-100"><strong>3. Which operator gives the size of a data type?</strong></p>
+            <div class="quiz-option">A) length</div>
+            <div class="quiz-option">B) sizeof</div>
+            <div class="quiz-option">C) size</div>
+            <div class="quiz-option">D) count</div>
+          </div>
+
+          <div class="quiz-question" data-answer="extern">
+            <p class="text-sky-100"><strong>4. Which keyword declares an external variable?</strong></p>
+            <div class="quiz-option">A) static</div>
+            <div class="quiz-option">B) extern</div>
+            <div class="quiz-option">C) global</div>
+            <div class="quiz-option">D) public</div>
+          </div>
+
+          <div class="quiz-question" data-answer="typedef">
+            <p class="text-sky-100"><strong>5. Which keyword creates an alias for a type?</strong></p>
+            <div class="quiz-option">A) alias</div>
+            <div class="quiz-option">B) typedef</div>
+            <div class="quiz-option">C) define</div>
+            <div class="quiz-option">D) using</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 4. Identifiers & Variables -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="220">
+      <h2 class="text-2xl font-semibold mb-3">4. Identifiers & Variables</h2>
+      <p class="text-sky-100 mb-3">
+        Identifiers are names you give to variables, functions, arrays, etc. Variables map to memory locations and can be local, global, static or external.
+      </p>
+
+      <div class="mermaid mb-4">
+        %%{init: {'theme': 'dark'}}%%
+        graph TD
+          A[Identifier] --> B[Variable]
+          B --> C[Local]
+          B --> D[Global]
+          B --> E[Static]
+          B --> F[External]
+          style A fill:#0369a1,stroke:#06b6d4,color:#fff
+          style C fill:#075985,stroke:#38bdf8,color:#fff
+          style D fill:#0f172a,stroke:#60a5fa,color:#fff
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Naming rules</h3>
+          <ul class="text-sky-100 list-disc list-inside">
+            <li>Start with a letter or underscore.</li>
+            <li>Contain only letters, digits, and underscore.</li>
+            <li>Not a keyword; case-sensitive.</li>
+            <li>Up to 31 significant characters (historical).</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Memory mapping example</h3>
+          <pre><code>int x = 10;  // stored at some memory address
+float pi = 3.14; // another address
+// Variables occupy memory locations identified by names (identifiers)</code></pre>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <h3 class="text-lg font-medium mb-2">Example: scopes and lifetime</h3>
+        <div class="code-editor">
+          <textarea id="code-ch2-vars">
+#include &lt;stdio.h&gt;
+
+int global = 100; // global variable
+
+void func() {
+    int local = 10; // local to func
+    static int s = 0; // static retains value across calls
+    s++;
+    printf("local=%d s=%d global=%d\n", local, s, global);
+}
+
+int main() {
+    func();
+    func();
+    return 0;
+}
+          </textarea>
+        </div>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Identifiers & Variables (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="vars">
+          <div class="quiz-question" data-answer="underscore">
+            <p class="text-sky-100"><strong>1. Which of these is a valid identifier?</strong></p>
+            <div class="quiz-option">A) 2var</div>
+            <div class="quiz-option">B) var-name</div>
+            <div class="quiz-option">C) _value</div>
+            <div class="quiz-option">D) var name</div>
+          </div>
+
+          <div class="quiz-question" data-answer="local">
+            <p class="text-sky-100"><strong>2. A variable declared inside a function is called?</strong></p>
+            <div class="quiz-option">A) Global</div>
+            <div class="quiz-option">B) Local</div>
+            <div class="quiz-option">C) External</div>
+            <div class="quiz-option">D) Static</div>
+          </div>
+
+          <div class="quiz-question" data-answer="static">
+            <p class="text-sky-100"><strong>3. Which variable retains its value between function calls?</strong></p>
+            <div class="quiz-option">A) local</div>
+            <div class="quiz-option">B) global</div>
+            <div class="quiz-option">C) static</div>
+            <div class="quiz-option">D) auto</div>
+          </div>
+
+          <div class="quiz-question" data-answer="extern">
+            <p class="text-sky-100"><strong>4. Which keyword declares a variable shared across files?</strong></p>
+            <div class="quiz-option">A) static</div>
+            <div class="quiz-option">B) register</div>
+            <div class="quiz-option">C) extern</div>
+            <div class="quiz-option">D) auto</div>
+          </div>
+
+          <div class="quiz-question" data-answer="case">
+            <p class="text-sky-100"><strong>5. Which identifier is different from 'Case' ?</strong></p>
+            <div class="quiz-option">A) Case</div>
+            <div class="quiz-option">B) case</div>
+            <div class="quiz-option">C) CASE</div>
+            <div class="quiz-option">D) caSe</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 5. Constants -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="260">
+      <h2 class="text-2xl font-semibold mb-3">5. Constants (Literals)</h2>
+      <p class="text-sky-100 mb-3">
+        Constants are fixed values that do not change during program execution: integer, real, character, and string literals.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Examples</h3>
+          <pre><code>Integer: 123, 077 (octal), 0x1F (hex)
+Real: 3.1415, 2.1565e2
+Character: 'A', '5', '+'
+String: "Hello C"</code></pre>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Code: using different constants</h3>
+          <div class="code-editor">
+            <textarea id="code-ch2-const">
+#include &lt;stdio.h&gt;
+
+int main() {
+    int i = 123;
+    float f = 3.14;
+    char c = 'A';
+    printf("i=%d f=%.2f c=%c\\n", i, f, c);
+    printf("Hex: 0x1F = %d\\n", 0x1F);
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Constants (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="consts">
+          <div class="quiz-question" data-answer="integer">
+            <p class="text-sky-100"><strong>1. Which is an integer constant?</strong></p>
+            <div class="quiz-option">A) 12.5</div>
+            <div class="quiz-option">B) 0xFF</div>
+            <div class="quiz-option">C) 'A'</div>
+            <div class="quiz-option">D) "123"</div>
+          </div>
+
+          <div class="quiz-question" data-answer="real">
+            <p class="text-sky-100"><strong>2. Which is a real constant?</strong></p>
+            <div class="quiz-option">A) 100</div>
+            <div class="quiz-option">B) 3.14</div>
+            <div class="quiz-option">C) 'g'</div>
+            <div class="quiz-option">D) 077</div>
+          </div>
+
+          <div class="quiz-question" data-answer="char">
+            <p class="text-sky-100"><strong>3. Which is a character constant?</strong></p>
+            <div class="quiz-option">A) 'x'</div>
+            <div class="quiz-option">B) \"x\"</div>
+            <div class="quiz-option">C) 0x78</div>
+            <div class="quiz-option">D) 120</div>
+          </div>
+
+          <div class="quiz-question" data-answer="string">
+            <p class="text-sky-100"><strong>4. Which is a string constant?</strong></p>
+            <div class="quiz-option">A) 'Hello'</div>
+            <div class="quiz-option">B) Hello</div>
+            <div class="quiz-option">C) "Hello"</div>
+            <div class="quiz-option">D) 123</div>
+          </div>
+
+          <div class="quiz-question" data-answer="octal">
+            <p class="text-sky-100"><strong>5. Which of these is an octal constant?</strong></p>
+            <div class="quiz-option">A) 0x1F</div>
+            <div class="quiz-option">B) 123</div>
+            <div class="quiz-option">C) 077</div>
+            <div class="quiz-option">D) 7</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 6. Data Types & Format Specifiers -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="300">
+      <h2 class="text-2xl font-semibold mb-3">6. Data Types & Format Specifiers</h2>
+      <p class="text-sky-100 mb-3">Common basic types and their printf specifiers.</p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr><th class="pb-2">Type</th><th class="pb-2">Keyword</th><th class="pb-2">Specifier</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="pt-2">Character</td><td class="pt-2">char</td><td class="pt-2">%c</td></tr>
+              <tr><td class="pt-2">Integer</td><td class="pt-2">int</td><td class="pt-2">%d</td></tr>
+              <tr><td class="pt-2">Float</td><td class="pt-2">float</td><td class="pt-2">%f</td></tr>
+              <tr><td class="pt-2">Double</td><td class="pt-2">double</td><td class="pt-2">%lf</td></tr>
+              <tr><td class="pt-2">Void</td><td class="pt-2">void</td><td class="pt-2">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Example: printf specifiers</h3>
+          <div class="code-editor">
+            <textarea id="code-ch2-printf">
+#include &lt;stdio.h&gt;
+
+int main() {
+    char ch = 'A';
+    int x = 42;
+    float f = 3.1415;
+    double d = 2.718281828;
+    printf("%c %d %.2f %lf\n", ch, x, f, d);
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Data Types (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="dtypes">
+          <div class="quiz-question" data-answer="%c">
+            <p class="text-sky-100"><strong>1. Which specifier prints a char?</strong></p>
+            <div class="quiz-option">A) %d</div>
+            <div class="quiz-option">B) %f</div>
+            <div class="quiz-option">C) %c</div>
+            <div class="quiz-option">D) %s</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%d">
+            <p class="text-sky-100"><strong>2. Which specifier prints an int?</strong></p>
+            <div class="quiz-option">A) %lf</div>
+            <div class="quiz-option">B) %f</div>
+            <div class="quiz-option">C) %c</div>
+            <div class="quiz-option">D) %d</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%f">
+            <p class="text-sky-100"><strong>3. Which specifier prints a float?</strong></p>
+            <div class="quiz-option">A) %f</div>
+            <div class="quiz-option">B) %lf</div>
+            <div class="quiz-option">C) %c</div>
+            <div class="quiz-option">D) %d</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%lf">
+            <p class="text-sky-100"><strong>4. Which specifier prints a double?</strong></p>
+            <div class="quiz-option">A) %lf</div>
+            <div class="quiz-option">B) %f</div>
+            <div class="quiz-option">C) %d</div>
+            <div class="quiz-option">D) %c</div>
+          </div>
+
+          <div class="quiz-question" data-answer="void">
+            <p class="text-sky-100"><strong>5. Which keyword indicates no return value?</strong></p>
+            <div class="quiz-option">A) none</div>
+            <div class="quiz-option">B) void</div>
+            <div class="quiz-option">C) null</div>
+            <div class="quiz-option">D) empty</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 7. Type Modifiers & Qualifiers -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="340">
+      <h2 class="text-2xl font-semibold mb-3">7. Type Modifiers & Qualifiers</h2>
+      <p class="text-sky-100 mb-3">
+        Modifiers alter the meaning/size of base types; qualifiers change variable properties like mutability.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Type Modifiers</h3>
+          <ul class="text-sky-100 list-disc list-inside">
+            <li><strong>short / long</strong> — change storage size of integers</li>
+            <li><strong>signed / unsigned</strong> — with/without sign</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Qualifiers</h3>
+          <ul class="text-sky-100 list-disc list-inside">
+            <li><strong>const</strong> — read-only variable</li>
+            <li><strong>volatile</strong> — value may change unexpectedly (hardware/ISR)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mermaid my-4">
+        %%{init: {'theme': 'dark'}}%%
+        graph LR
+          A[Modifiers] --> B[short,long]
+          A --> C[signed,unsigned]
+          D[Qualifiers] --> E[const]
+          D --> F[volatile]
+          style A fill:#0369a1,stroke:#06b6d4
+          style D fill:#075985,stroke:#38bdf8
+      </div>
+
+      <div class="code-editor">
+        <textarea id="code-ch2-mod">
+#include &lt;stdio.h&gt;
+
+int main() {
+    const int MAX = 100;
+    unsigned int u = 3000000000u;
+    long int big = 1234567890L;
+    printf("MAX=%d u=%u big=%ld\n", MAX, u, big);
+    return 0;
+}
+        </textarea>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Modifiers & Qualifiers (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="mods">
+          <div class="quiz-question" data-answer="const">
+            <p class="text-sky-100"><strong>1. Which qualifier makes a variable read-only?</strong></p>
+            <div class="quiz-option">A) volatile</div>
+            <div class="quiz-option">B) const</div>
+            <div class="quiz-option">C) static</div>
+            <div class="quiz-option">D) signed</div>
+          </div>
+
+          <div class="quiz-question" data-answer="unsigned">
+            <p class="text-sky-100"><strong>2. Which modifier allows only non-negative integers?</strong></p>
+            <div class="quiz-option">A) signed</div>
+            <div class="quiz-option">B) unsigned</div>
+            <div class="quiz-option">C) long</div>
+            <div class="quiz-option">D) short</div>
+          </div>
+
+          <div class="quiz-question" data-answer="short">
+            <p class="text-sky-100"><strong>3. Which modifier reduces storage size of int?</strong></p>
+            <div class="quiz-option">A) long</div>
+            <div class="quiz-option">B) short</div>
+            <div class="quiz-option">C) unsigned</div>
+            <div class="quiz-option">D) const</div>
+          </div>
+
+          <div class="quiz-question" data-answer="volatile">
+            <p class="text-sky-100"><strong>4. Which qualifier indicates the value may change outside program flow?</strong></p>
+            <div class="quiz-option">A) volatile</div>
+            <div class="quiz-option">B) const</div>
+            <div class="quiz-option">C) auto</div>
+            <div class="quiz-option">D) register</div>
+          </div>
+
+          <div class="quiz-question" data-answer="long">
+            <p class="text-sky-100"><strong>5. Which modifier increases size of an int?</strong></p>
+            <div class="quiz-option">A) short</div>
+            <div class="quiz-option">B) long</div>
+            <div class="quiz-option">C) signed</div>
+            <div class="quiz-option">D) volatile</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 8. Punctuations & Operators -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="380">
+      <h2 class="text-2xl font-semibold mb-3">8. Punctuations & Operators</h2>
+      <p class="text-sky-100 mb-3">
+        Punctuation characters like <code>{ } ( ) ; , #</code> organize the program. Operators perform arithmetic, comparison and logical operations.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Operator groups</h3>
+          <ul class="text-sky-100 list-disc list-inside">
+            <li>Arithmetic: <code>+ - * / %</code></li>
+            <li>Relational: <code>== != &gt; &lt; &gt;= &lt;=</code></li>
+            <li>Logical: <code>&& || !</code></li>
+            <li>Bitwise: <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></li>
+            <li>Assignment: <code>= += -= *= /=</code></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Code: operator examples</h3>
+          <div class="code-editor">
+            <textarea id="code-ch2-op">
+#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 3;
+    printf("a+b=%d a/b=%d a%b=%d\\n", a+b, a/b, a%b);
+    printf("a>b? %d\\n", a>b);
+    printf("logical: %d\\n", (a>5) && (b<5));
+    return 0;
+}
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz (5) -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold mb-2">Quick Quiz — Operators & Punctuations (5)</h3>
+        <div class="space-y-3 quiz-block" data-topic="ops">
+          <div class="quiz-question" data-answer="+">
+            <p class="text-sky-100"><strong>1. Which operator performs addition?</strong></p>
+            <div class="quiz-option">A) -</div>
+            <div class="quiz-option">B) *</div>
+            <div class="quiz-option">C) +</div>
+            <div class="quiz-option">D) /</div>
+          </div>
+
+          <div class="quiz-question" data-answer="==">
+            <p class="text-sky-100"><strong>2. Which operator tests equality?</strong></p>
+            <div class="quiz-option">A) =</div>
+            <div class="quiz-option">B) ==</div>
+            <div class="quiz-option">C) ===</div>
+            <div class="quiz-option">D) :=</div>
+          </div>
+
+          <div class="quiz-question" data-answer="&&">
+            <p class="text-sky-100"><strong>3. Which is logical AND in C?</strong></p>
+            <div class="quiz-option">A) &</div>
+            <div class="quiz-option">B) &&</div>
+            <div class="quiz-option">C) ||</div>
+            <div class="quiz-option">D) !</div>
+          </div>
+
+          <div class="quiz-question" data-answer="%">
+            <p class="text-sky-100"><strong>4. Which operator gives remainder?</strong></p>
+            <div class="quiz-option">A) /</div>
+            <div class="quiz-option">B) %</div>
+            <div class="quiz-option">C) //</div>
+            <div class="quiz-option">D) &</div>
+          </div>
+
+          <div class="quiz-question" data-answer=";">
+            <p class="text-sky-100"><strong>5. Which punctuation ends a statement?</strong></p>
+            <div class="quiz-option">A) ,</div>
+            <div class="quiz-option">B) ;</div>
+            <div class="quiz-option">C) .</div>
+            <div class="quiz-option">D) : </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Summary & Navigation -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="420">
+      <h2 class="text-2xl font-semibold mb-3">Summary</h2>
+      <ul class="text-sky-100 list-disc list-inside">
+        <li>Tokens are the lexical units the compiler recognizes — keywords, identifiers, constants, operators, and punctuations.</li>
+        <li>Understanding tokens helps write error-free C code and aids debugging.</li>
+        <li>Practice: try modifying the code samples and run them in your environment (CodeMirror is read-only for some blocks).</li>
+      </ul>
+
+      <div class="mt-6 flex gap-4">
+        <a href="chapter1.html" class="btn">← Chapter 1</a>
+        <a href="chapter3.html" class="btn">Chapter 3 →</a>
+        <a href="#" onclick="downloadNotes()" class="btn">Download Notes</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer mt-16">
+    © 2025 C Programming Course | Chapter 2 • <a href="../index.html" class="text-sky-300 hover:underline">Back to Home</a>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 700 });
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  </script>
+
+  <script>
+  // Initialize AOS, Mermaid, CodeMirror
+  AOS.init({ once: true, duration: 700 });
+  mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+
+  function initCodeMirror(id, options = {}) {
+    const ta = document.getElementById(id);
+    if (!ta) return null;
+    return CodeMirror.fromTextArea(ta, Object.assign({
+      mode: 'text/x-csrc',
+      theme: 'dracula',
+      lineNumbers: true,
+      readOnly: false,
+      viewportMargin: Infinity
+    }, options));
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Init all editors
+    const editors = [
+      'code-ch2-esc', 'code-ch2-kw', 'code-ch2-vars',
+      'code-ch2-const', 'code-ch2-printf', 'code-ch2-mod', 'code-ch2-op'
+    ];
+    editors.forEach(id => initCodeMirror(id));
+
+    // Download notes
+    window.downloadNotes = function() {
+      const content = `C Programming - Chapter 2: C Tokens\n\n` +
+        `Topics Covered:\n` +
+        `- Character Set & Escape Sequences\n` +
+        `- Keywords (32 reserved)\n` +
+        `- Identifiers & Variables (local, global, static, extern)\n` +
+        `- Constants (int, float, char, string)\n` +
+        `- Data Types & printf specifiers\n` +
+        `- Type Modifiers & Qualifiers\n` +
+        `- Operators & Punctuators\n\n` +
+        `Generated on: ${new Date().toLocaleDateString()}\n` +
+        `Keep coding! 💙`;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'Chapter2_C_Tokens_Notes.txt';
+      a.click(); URL.revokeObjectURL(url);
+    };
+
+    // === ENHANCED QUIZ SYSTEM WITH RESET BUTTONS ===
+    const specialMap = {
+      'newline': '\\n', 'tab': '\\t', 'backslash': '\\\\', 'doublequote': '\\"', 'carriage': '\\r',
+      'main': 'main()', 'return': 'return', 'sizeof': 'sizeof', 'extern': 'extern', 'typedef': 'typedef',
+      'underscore': '_value', 'local': 'Local', 'static': 'static', 'case': 'case',
+      'integer': '0xFF', 'real': '3.14', 'char': "'x'", 'string': '"Hello"', 'octal': '077',
+      '%c': '%c', '%d': '%d', '%f': '%f', '%lf': '%lf', 'void': 'void',
+      'const': 'const', 'unsigned': 'unsigned', 'short': 'short', 'volatile': 'volatile', 'long': 'long',
+      '+': '+', '==': '==', '&&': '&&', '%': '%', ';': ';'
+    };
+
+    function normalize(str) {
+      return (str || '').toString().toLowerCase().trim().replace(/\s+/g, '');
+    }
+
+    function isCorrect(optionText, correctKey) {
+      const opt = normalize(optionText);
+      const key = normalize(correctKey);
+      const mapped = specialMap[key] ? normalize(specialMap[key]) : key;
+      return opt === key || opt === mapped || opt.includes(key) || opt.includes(mapped);
+    }
+
+    document.querySelectorAll('.quiz-block').forEach((block, index) => {
+      // Add Reset Button
+      let resetBtn = block.querySelector('.quiz-reset');
+      if (!resetBtn) {
+        resetBtn = document.createElement('button');
+        resetBtn.className = 'quiz-reset btn mt-4 text-sm';
+        resetBtn.innerHTML = 'Reset Quiz';
+        block.appendChild(resetBtn);
+      }
+
+      function resetQuiz() {
+        block.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.classList.remove('correct', 'wrong');
+          opt.style.pointerEvents = 'auto';
+        });
+      }
+      resetBtn.addEventListener('click', resetQuiz);
+
+      // Attach quiz logic
+      block.querySelectorAll('.quiz-question').forEach(q => {
+        const correctKey = q.getAttribute('data-answer');
+
+        q.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.style.cursor = 'pointer';
+          opt.addEventListener('click', function() {
+            if (this.classList.contains('correct') || this.classList.contains('wrong')) return;
+
+            const clickedText = this.textContent.trim();
+            const correct = isCorrect(clickedText, correctKey);
+
+            q.querySelectorAll('.quiz-option').forEach(o => {
+              o.style.pointerEvents = 'none';
+              if (isCorrect(o.textContent.trim(), correctKey)) {
+                o.classList.add('correct');
+              }
+            });
+
+            if (!correct) {
+              this.classList.add('wrong');
+            }
+          });
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

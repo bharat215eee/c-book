@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapter 1: Algorithms, Flowcharts & C Structure</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <!-- AOS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
+  <!-- Mermaid v11.12.1 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.min.js"></script>
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      margin: 0;
+    }
+    .header-gradient {
+      background: linear-gradient(90deg, #ea580c, #f97316);
+    }
+    .card {
+      background-color: #1e293b;
+      border-left: 4px solid #0ea5e9;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(14, 165, 233, 0.25);
+    }
+    .code-editor {
+      border: 1px solid #334155;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .mermaid {
+      background: #0f172a;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      overflow-x: auto;
+    }
+    .quiz-option {
+      cursor: pointer;
+      padding: 0.75rem;
+      background: #1e293b;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      transition: all 0.2s;
+    }
+    .quiz-option:hover {
+      background: #334155;
+    }
+    .quiz-option.correct {
+      background: #166534 !important;
+      color: white;
+    }
+    .quiz-option.wrong {
+      background: #7f1d1d !important;
+      color: white;
+    }
+    .btn {
+      background-color: #0ea5e9;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      background-color: #0284c7;
+    }
+    .footer {
+      background-color: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* ==== MERMAID v11.12.1 – CORRECT SHAPES ==== */
+    .mermaid svg { 
+      background: #0f172a !important; 
+      border-radius: 8px; 
+      overflow: visible; 
+    }
+    .mermaid .node rect { 
+      rx: 0 !important; 
+      ry: 0 !important; 
+    }
+    .mermaid .startEnd circle,
+    .mermaid .startEnd ellipse { 
+      fill: #1e40af !important; 
+      stroke: #3b82f6 !important; 
+      stroke-width: 2px !important; 
+    }
+    .mermaid .io polygon { 
+      fill: #15803d !important; 
+      stroke: #22c55e !important; 
+      stroke-width: 2px !important; 
+    }
+    .mermaid .process rect {
+      fill: #7c2d12 !important;
+      stroke: #f97316 !important;
+      stroke-width: 2px !important;
+      rx: 0 !important;
+      ry: 0 !important;
+    }
+    .mermaid .decision polygon { 
+      fill: #991b1b !important; 
+      stroke: #ef4444 !important; 
+      stroke-width: 2px !important; 
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%) !important; 
+    }
+    .mermaid text { 
+      fill: #fff !important; 
+      font-weight: 500 !important; 
+      font-family: 'Inter', sans-serif !important; 
+    }
+    .mermaid .edgeLabel { 
+      background: #0f172a !important; 
+      color: #e2e8f0 !important; 
+      padding: 4px 8px !important; 
+      border-radius: 4px !important; 
+    }
+
+    /* ==== SYMBOL LEGEND ==== */
+    .symbol-oval {
+      width: 100px; height: 50px;
+      background: #1e40af;
+      border: 2px solid #3b82f6;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: white;
+    }
+    .symbol-parallelogram {
+      width: 100px; height: 50px;
+      background: #15803d;
+      border: 2px solid #22c55e;
+      clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: white;
+    }
+    .symbol-rectangle {
+      width: 100px; height: 50px;
+      background: #7c2d12;
+      border: 2px solid #f97316;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: white;
+    }
+    .symbol-diamond {
+      width: 70px; height: 70px;
+      background: #991b1b;
+      border: 2px solid #ef4444;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Header -->
+  <header class="header-gradient shadow-lg fixed w-full z-50" data-aos="fade-down">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center space-x-3">
+        <svg class="w-10 h-10" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 20C30 20 20 30 20 50s10 30 30 30 30-10 30-30S70 20 50 20zm0 50c-10 0-18-8-18-18s8-18 18-18 18 8 18 18-8 18-18 18z" fill="#ea580c"/>
+          <path d="M40 40h20v20H40z" fill="#ffffff"/>
+          <text x="50" y="90" font-size="12" text-anchor="middle" fill="#ffffff">C</text>
+        </svg>
+        <h1 class="text-xl font-bold text-white">C Programming</h1>
+      </a>
+      <nav>
+        <a href="../index.html" class="text-white hover:underline mr-4">Home</a>
+        <a href="chapter2.html" class="text-white hover:underline">Next Chapter</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto pt-24 pb-12 px-4">
+
+    <!-- Title + Author -->
+    <section class="text-center mb-12" data-aos="fade-up">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">
+        Chapter 1: Algorithms, Flowcharts & Structure of C Program
+      </h1>
+      <p class="text-lg text-gray-300 mb-4">Master problem-solving logic and write your first C program</p>
+      <p class="text-sm text-gray-400 italic">
+        Based on lectures by <strong>Dr. N Bharath Kumar</strong>, Asst. Professor, Dept. of EEE, VFSTR
+      </p>
+    </section>
+
+    <!-- 1. Algorithm -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="100">
+      <h2 class="text-2xl font-semibold text-orange-400 mb-4">1. What is an Algorithm?</h2>
+      <p class="mb-4">
+        <strong>An algorithm is a set of instructions for solving a problem or accomplishing a task.</strong>
+      </p>
+      <p class="mb-6 text-gray-300">
+        For designing any solution, the following must be known:
+      </p>
+      <ul class="list-disc list-inside text-gray-300 mb-6 space-y-1">
+        <li><strong>Input</strong> – Data to be processed</li>
+        <li><strong>Tasks to be performed</strong> – Steps to transform input</li>
+        <li><strong>Output expected</strong> – Final result</li>
+      </ul>
+
+      <!-- INPUT → PROCESS → OUTPUT DIAGRAM (Mermaid) -->
+      <div class="mermaid mb-6">
+        %%{init: {'theme': 'dark'}}%%
+        graph LR
+          A[INPUT] --> B[Set of rules to obtain the expected OUTPUT from the given INPUT]
+          B --> C[OUTPUT]
+          style A fill:#dc2626,stroke:#ef4444,color:#fff
+          style C fill:#dc2626,stroke:#ef4444,color:#fff
+          style B fill:#1e40af,stroke:#3b82f6,color:#fff
+      </div>
+
+      <div class="bg-gray-800 p-4 rounded-lg text-sm font-mono">
+        <strong>Example: Find maximum of two numbers</strong><br>
+        1. Start<br>
+        2. Input a, b<br>
+        3. If a > b then Print a else Print b<br>
+        4. Stop
+      </div>
+    </div>
+
+    <!-- 2. Flowcharts -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="200">
+      <h2 class="text-2xl font-semibold text-orange-400 mb-4">2. Flowcharts</h2>
+      <p class="mb-4">
+        <strong>Flowcharts are the graphical representation of a solution to a particular problem</strong> which comes under the category of Programming Practices and Techniques.
+      </p>
+      <p class="mb-4 text-gray-300">
+        In simple words, a <strong>flowchart is a graphical representation of a program</strong>.
+      </p>
+      <ul class="list-disc list-inside text-gray-300 mb-6 space-y-1">
+        <li>Symbolic diagrams showing data type, data flow, control flow, and logic</li>
+        <li>Uses <strong>pictorial representation</strong> instead of descriptive steps (algorithm)</li>
+      </ul>
+
+      <!-- MAIN FLOWCHART -->
+      <div class="mermaid">
+        %%{init: {'theme': 'dark', 'flowchart': {'useMaxWidth': true}}}%%
+        graph TD
+          classDef startEnd fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#fff
+          classDef io fill:#15803d,stroke:#22c55e,stroke-width:2px,color:#fff
+          classDef process fill:#7c2d12,stroke:#f97316,stroke-width:2px,color:#fff
+          classDef decision fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#fff
+
+          A([Start]):::startEnd
+          B[/Input a, b/]:::io
+          C{a > b?}:::decision
+          D[/Print a/]:::io
+          E[/Print b/]:::io
+          F([End]):::startEnd
+
+          A --> B
+          B --> C
+          C -->|Yes| D
+          C -->|No| E
+          D --> F
+          E --> F
+      </div>
+
+      <!-- SYMBOL LEGEND -->
+      <h3 class="text-xl font-semibold text-orange-300 mt-8 mb-4">Standard Flowchart Symbols</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center text-sm">
+        <div>
+          <div class="symbol-oval mx-auto">Start/End</div>
+          <p class="mt-2">Oval</p>
+        </div>
+        <div>
+          <div class="symbol-parallelogram mx-auto">Input/Output</div>
+          <p class="mt-2">Parallelogram</p>
+        </div>
+        <div>
+          <div class="symbol-rectangle mx-auto">Process</div>
+          <p class="mt-2">Rectangle</p>
+        </div>
+        <div>
+          <div class="symbol-diamond">?</div>
+          <p class="mt-2">Decision</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. C Program Structure -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="300">
+      <h2 class="text-2xl font-semibold text-orange-400 mb-4">3. Structure of a C Program</h2>
+      <div class="code-editor">
+        <textarea id="c-code">
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\\n");
+    return 0;
+}
+        </textarea>
+      </div>
+
+      <!-- BEAUTIFUL STRUCTURE CARDS -->
+      <div class="mt-8 space-y-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-900/50 to-blue-800/30 border border-blue-700/50 p-5 backdrop-blur-sm transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
+            <div class="flex items-center space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+              <div>
+                <h4 class="font-semibold text-blue-300 text-sm">Preprocessor Directive</h4>
+                <p class="text-gray-300 text-xs mt-1">#include &lt;stdio.h&gt; — loads I/O functions</p>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-900/50 to-green-800/30 border border-green-700/50 p-5 backdrop-blur-sm transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/20">
+            <div class="flex items-center space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+              <div>
+                <h4 class="font-semibold text-green-300 text-sm">Main Function</h4>
+                <p class="text-gray-300 text-xs mt-1">int main() — program entry point</p>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-green-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-red-900/50 to-red-800/30 border border-red-700/50 p-5 backdrop-blur-sm transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/20">
+            <div class="flex items-center space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+              <div>
+                <h4 class="font-semibold text-red-300 text-sm">Code Block</h4>
+                <p class="text-gray-300 text-xs mt-1">{ ... } — defines function body</p>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-pink-900/50 to-pink-800/30 border border-pink-700/50 p-5 backdrop-blur-sm transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-rose-500/20">
+            <div class="flex items-center space-x-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+              <div>
+                <h4 class="font-semibold text-pink-300 text-sm">Return Statement</h4>
+                <p class="text-gray-300 text-xs mt-1">return 0; — indicates success</p>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-pink-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. First Program -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="400">
+      <h2 class="text-2xl font-semibold text-orange-400 mb-4">4. Your First C Program</h2>
+      <div class="code-editor">
+        <textarea id="hello-code">
+#include <stdio.h>
+
+int main() {
+    printf("Welcome to C Programming!\\n");
+    return 0;
+}
+        </textarea>
+      </div>
+      <button onclick="runCode()" class="btn mt-4">Run Code</button>
+      <pre id="output" class="mt-4 bg-black text-green-400 p-4 rounded hidden font-mono text-sm"></pre>
+    </div>
+
+    <!-- Quiz -->
+    <div class="card p-6 mb-8" data-aos="fade-up" data-aos-delay="500">
+      <h2 class="text-2xl font-semibold text-orange-400 mb-4">Quick Quiz</h2>
+      <div class="space-y-8" id="quiz-container">
+        <div class="quiz-question" data-answer="main()">
+          <p><strong>1. What is the entry point of a C program?</strong></p>
+          <div class="quiz-option">A) start()</div>
+          <div class="quiz-option">B) begin()</div>
+          <div class="quiz-option">C) main()</div>
+          <div class="quiz-option">D) init()</div>
+        </div>
+        <div class="quiz-question" data-answer="Diamond">
+          <p><strong>2. Which shape represents decision in flowchart?</strong></p>
+          <div class="quiz-option">A) Rectangle</div>
+          <div class="quiz-option">B) Oval</div>
+          <div class="quiz-option">C) Diamond</div>
+          <div class="quiz-option">D) Circle</div>
+        </div>
+      </div>
+      <button onclick="resetQuiz()" class="btn mt-6">Reset Quiz</button>
+    </div>
+
+    <!-- Download Notes -->
+    <div class="text-center" data-aos="zoom-in">
+      <a href="#" class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold">
+        Download Chapter 1 Notes (PDF)
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer mt-16">
+    © 2025 C Programming Course | Chapter 1 • <a href="../index.html" class="text-orange-400 hover:underline">Back to Home</a>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 800 });
+
+    // Initialize Mermaid
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'dark',
+      flowchart: { useMaxWidth: true }
+    });
+
+    // CodeMirror
+    CodeMirror.fromTextArea(document.getElementById('c-code'), {
+      mode: 'text/x-csrc', theme: 'monokai', lineNumbers: true, readOnly: true
+    });
+    CodeMirror.fromTextArea(document.getElementById('hello-code'), {
+      mode: 'text/x-csrc', theme: 'monokai', lineNumbers: true
+    });
+
+    // Run Code
+    function runCode() {
+      const output = document.getElementById('output');
+      output.classList.remove('hidden');
+      output.textContent = "Welcome to C Programming!\n";
+    }
+
+    // Quiz Logic
+    document.querySelectorAll('.quiz-question').forEach(q => {
+      const correct = q.getAttribute('data-answer');
+      q.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+          const parent = this.parentElement;
+          parent.querySelectorAll('.quiz-option').forEach(o => {
+            o.style.pointerEvents = 'none';
+            if (o.textContent.includes(correct)) {
+              o.classList.add('correct');
+            } else if (o === this) {
+              o.classList.add('wrong');
+            }
+          });
+        });
+      });
+    });
+
+    // Reset Quiz
+    function resetQuiz() {
+      document.querySelectorAll('.quiz-question').forEach(q => {
+        q.querySelectorAll('.quiz-option').forEach(o => {
+          o.classList.remove('correct', 'wrong');
+          o.style.pointerEvents = 'auto';
+        });
+      });
+    }
+  </script>
+</body>
+</html>
