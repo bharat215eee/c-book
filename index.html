@@ -11,8 +11,11 @@
     <!-- AOS Animation Library -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 
-    <!-- Font: Inter (via Google Fonts) -->
+    <!-- Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
     <style>
         body {
@@ -30,7 +33,7 @@
             border-left: 4px solid #0ea5e9;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
@@ -61,9 +64,6 @@
             color: white;
             font-weight: 600;
         }
-        .logo-c {
-            fill: #3b82f6;
-        }
         .footer {
             background-color: #0f172a;
             color: #94a3b8;
@@ -83,6 +83,26 @@
             background-color: #0284c7;
             transform: scale(1.05);
         }
+        .chapter-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .chapter-card:hover {
+            transform: translateY(-8px);
+        }
+        .chapter-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -92,7 +112,7 @@
         <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
                 <svg class="w-12 h-12" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 20C30 20 20 30 20 50s10 30 30 30 30-10 30-30S70 20 50 20zm0 50c-10 0-18-8-18-18s8-18 18-18 18 8 18 18-8 18-18 18z" class="logo-c"/>
+                    <path d="M50 20C30 20 20 30 20 50s10 30 30 30 30-10 30-30S70 20 50 20zm0 50c-10 0-18-8-18-18s8-18 18-18 18 8 18 18-8 18-18 18z" fill="#3b82f6"/>
                     <path d="M40 40h20v20H40z" fill="#ffffff"/>
                     <text x="50" y="90" font-size="12" text-anchor="middle" fill="#ffffff">C</text>
                 </svg>
@@ -108,28 +128,25 @@
     <!-- Hero Section -->
     <main class="max-w-6xl mx-auto pt-28 pb-12 px-4">
         <section class="text-center mb-16" data-aos="fade-up">
-            <h2 class="text-5xl font-bold text-white mb-4">Master C Programming in 2025</h2>
+            <h2 class="text-5xl font-bold text-white mb-4">Programming in C</h2>
             <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                Build a rock-solid foundation in systems programming with interactive lessons, real-world projects, and deep insights into how computers truly work.
+                From algorithms to low-level systems — build unshakable programming skills with hands-on lessons and real-world projects.
             </p>
-            <a href="chapters/index.html" class="btn-primary text-lg inline-block">Start Learning Now</a>
+            
         </section>
 
         <!-- Why Learn C? Section -->
         <section id="why-c" class="mt-20">
             <h2 class="text-4xl font-bold text-center text-white mb-12" data-aos="fade-up">Why Learn C in 2025?</h2>
 
-            <!-- Integrated why_C.html content -->
             <div class="space-y-8">
 
-                <!-- Card 1 -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="100">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-3">1. Foundation of Modern Programming</h3>
                     <p>C is the <strong>"mother tongue"</strong> of systems programming. Languages like C++, Java, Python, Rust, and Go borrow heavily from its syntax and logic.</p>
                     <div class="highlight mt-3">Understanding C gives you deep insight into how higher-level languages work under the hood.</div>
                 </div>
 
-                <!-- Card 2 -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-3">2. Control Over Hardware & Performance</h3>
                     <ul class="list-disc pl-6 space-y-1">
@@ -139,14 +156,12 @@
                     <div class="highlight mt-3">Example: Writing a device driver or neural net kernel likely involves C.</div>
                 </div>
 
-                <!-- Card 3 -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="300">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-3">3. Memory Management</h3>
                     <p>Learning <code class="bg-gray-800 px-2 py-1 rounded">malloc</code>, <code class="bg-gray-800 px-2 py-1 rounded">free</code>, stack vs heap helps understand pointers, memory leaks, and buffer overflows.</p>
                     <div class="highlight mt-3">Teaches low-level memory logic essential for all languages.</div>
                 </div>
 
-                <!-- Card 4: Career Table -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="400">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-4">4. Career & Industry Demand</h3>
                     <table>
@@ -158,7 +173,6 @@
                     </table>
                 </div>
 
-                <!-- Card 5 -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="500">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-3">5. Teaches Discipline & Debugging</h3>
                     <ul class="list-disc pl-6 space-y-1">
@@ -168,7 +182,6 @@
                     </ul>
                 </div>
 
-                <!-- Card 6 -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="600">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-3">6. Still Used in 2025</h3>
                     <ul class="list-disc pl-6 space-y-1">
@@ -178,7 +191,6 @@
                     </ul>
                 </div>
 
-                <!-- Card 7 -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="700">
                     <h3 class="text-2xl font-semibold text-sky-400 mb-3">7. Gateway to Systems Programming</h3>
                     <ul class="list-disc pl-6 space-y-1">
@@ -187,7 +199,6 @@
                     </ul>
                 </div>
 
-                <!-- When NOT to Use C -->
                 <div class="card p-6" data-aos="fade-up" data-aos-delay="800">
                     <h3 class="text-2xl font-semibold text-red-400 mb-4">When NOT to Use C</h3>
                     <table>
@@ -198,7 +209,6 @@
                     </table>
                 </div>
 
-                <!-- Final Verdict -->
                 <div class="card p-6 text-center bg-gradient-to-r from-sky-600 to-blue-700 border-none" data-aos="zoom-in" data-aos-delay="900">
                     <h3 class="text-2xl font-bold text-white mb-4">Final Verdict</h3>
                     <p class="text-lg text-white mb-4"><strong>Learn C</strong> if you want to:</p>
@@ -225,28 +235,39 @@
             </ul>
         </section>
 
-        <!-- Chapters Preview -->
+        <!-- Chapters Section -->
         <section id="chapters" class="mt-20">
             <h3 class="text-3xl font-bold text-center text-white mb-10">Course Chapters</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <a href="chapters/index.html" class="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl text-white hover:scale-105 transition-transform" data-aos="fade-up">
-                    <h4 class="text-xl font-semibold mb-2">Chapter 1: Introduction to C Programming</h4>
-                    <p>Variables, data types, I/O, control structures, and your first programs.</p>
+
+                <!-- Chapter 1 -->
+                <a href="chapters/chapter1.html" class="chapter-card p-6 text-white hover:shadow-2xl" data-aos="fade-up">
+                    <div class="chapter-icon">
+                        <i data-lucide="workflow"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-2">Chapter 1: Algorithms, Flowcharts & Structure of C Program</h4>
+                    <p>Learn problem-solving with algorithms, visualize logic using flowcharts, and understand the anatomy of a C program.</p>
                 </a>
-                <div class="bg-gray-800 p-6 rounded-xl" data-aos="fade-up" data-aos-delay="100">
-                    <h4 class="text-xl font-semibold mb-2 text-gray-400">Chapter 2: Coming Soon</h4>
-                    <p class="text-gray-500">Functions, pointers, arrays, strings, and memory mastery.</p>
-                </div>
+
+                <!-- Chapter 2 -->
+                <a href="chapters/chapter2.html" class="chapter-card p-6 text-white hover:shadow-2xl opacity-90" data-aos="fade-up" data-aos-delay="100">
+                    <div class="chapter-icon">
+                        <i data-lucide="code"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-2">Chapter 2: C Tokens</h4>
+                    <p>Explore keywords, identifiers, constants, strings, operators, and punctuators — the building blocks of C syntax.</p>
+                </a>
+
             </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer mt-20">
-        &copy; 2025 C Programming Initiative | Built for Systems Thinkers
+        © 2025 C Programming Initiative | Crafted for Systems Thinkers
     </footer>
 
-    <!-- AOS JS -->
+    <!-- AOS + Lucide Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         AOS.init({
@@ -255,7 +276,10 @@
             easing: 'ease-out-cubic'
         });
 
-        // Smooth scroll for anchor links
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
